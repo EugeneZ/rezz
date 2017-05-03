@@ -5,8 +5,8 @@ export default function set(actionOrActions) {
     const actions = castArray(actionOrActions);
     return function (state, action = {}, options = defaultOptions) {
         if (actions.includes(action.type)) {
-            const data = options.valueStrategy(action);
-            const key = options.keyStrategy(action);
+            const data = options.payloadStrategy(action);
+            const key  = options.keyStrategy(action);
 
             return {
                 ...state,
@@ -14,5 +14,5 @@ export default function set(actionOrActions) {
             };
         }
         return state;
-    }
+    };
 }

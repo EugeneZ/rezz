@@ -57,7 +57,8 @@ These options determine how all the reducers passed to the reducer creator act.
     initialState: any,
     combiner: Combiner,
     equalityCheck: <T>(a: T, b: T) => boolean,
-    dataStrategy: (action: Action) => any,
+    payloadStrategy: (action: Action) => any,
+    keyStrategy: (action: Action) => any,
 }
 ```
 
@@ -67,8 +68,8 @@ options, and returns a single reducer that combines the list of reducers. By def
 it uses `chainCombiner` that simply runs the reducers one after another.
 * `equalityCheck` (default `(a, b)=>a===b`): A function that is used when a reducer
 needs to determine if two items in a list or collection are equal.
-* `valueStrategy` (default `action => action.data`): A function that takes a
-`redux`-like action and returns the relevant data.
+* `payloadStrategy` (default `action => action.payload`): A function that takes a
+`redux`-like action and returns the relevant payload.
 * `keyStrategy` (default `action => action.key`): A function that takes a
 `redux`-like action and returns the relevant key.
 

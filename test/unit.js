@@ -19,8 +19,8 @@ test('createReducerCreator', t => {
         (a, b, options) => {
             const obj = {};
             t.equals(options.equalityCheck(obj, obj), true, 'default equalityCheck is an identity check');
-            t.equals(options.valueStrategy({ data: true }), true, 'default valueStrategy uses data prop');
-            t.equals(options.keyStrategy({ key: true }), true, 'default keyStrategy uses data prop');
+            t.equals(options.payloadStrategy({ payload: true }), true, 'default payloadStrategy uses data prop');
+            t.equals(options.keyStrategy({ key: true }), true, 'default keyStrategy uses key prop');
             t.equals(options.combiner, chainCombiner, 'default combiner is chainCombiner');
         }
     )();
@@ -33,7 +33,7 @@ test('example', t => {
 
     t.doesNotThrow(() => {
         const reducer = createReducerCreator({
-            valueStrategy: action => action.v,
+            payloadStrategy: action => action.v,
             initialState: [1, 2, 3]
         })(
             addToList('ADD'),
@@ -85,17 +85,17 @@ test('addToList', t => {
     t.equals(listAdder(state), state, 'returns state when not triggered');
     t.equals(listAdder(state).length, 0, 'returns state when not triggered');
 
-    newState = listAdder(state, { type: 'TEST', data: [5] });
-    t.deepEquals(newState, [5], 'returns data value when triggered');
+    newState = listAdder(state, { type: 'TEST', payload: [5] });
+    t.deepEquals(newState, [5], 'returns payload value when triggered');
 
-    newState = listAdder(newState, { type: 'TEST', data: [6, 7] });
+    newState = listAdder(newState, { type: 'TEST', payload: [6, 7] });
     t.deepEquals(newState, [5, 6, 7], 'can add arrays to the list');
 
-    newState = listAdder(newState, { type: 'TEST', data: 8 });
+    newState = listAdder(newState, { type: 'TEST', payload: 8 });
     t.deepEquals(newState, [5, 6, 7, 8], 'can add non-arrays list');
 
-    newState = listAdder(newState, { type: 'TEST', data2: 9 }, { valueStrategy: action => action.data2 });
-    t.deepEquals(newState, [5, 6, 7, 8, 9], 'listens to valueStrategy');
+    newState = listAdder(newState, { type: 'TEST', payload2: 9 }, { payloadStrategy: action => action.payload2 });
+    t.deepEquals(newState, [5, 6, 7, 8, 9], 'listens to payloadStrategy');
 
     t.equals(state.length, 0, 'does not mutate state');
 
@@ -113,23 +113,23 @@ test('removeFromList', t => {
     t.equals(listRemover(state), state, 'returns state when not triggered');
     t.equals(listRemover(state).length, 6, 'returns state when not triggered');
 
-    newState = listRemover(state, { type: 'TEST', data: [6, 7] });
+    newState = listRemover(state, { type: 'TEST', payload: [6, 7] });
     t.deepEquals(newState, [5, 8, 9, someObj], 'can remove arrays from the list');
 
-    newState = listRemover(newState, { type: 'TEST', data: 8 });
+    newState = listRemover(newState, { type: 'TEST', payload: 8 });
     t.deepEquals(newState, [5, 9, someObj], 'can remove non-arrays list');
 
-    newState = listRemover(newState, { type: 'TEST', data: someObj });
+    newState = listRemover(newState, { type: 'TEST', payload: someObj });
     t.deepEquals(newState, [5, 9], 'default equality is identity check');
 
-    newState = listRemover(newState, { type: 'TEST', data2: 9 }, {
-        valueStrategy: action => action.data2,
+    newState = listRemover(newState, { type: 'TEST', payload2: 9 }, {
+        payloadStrategy: action => action.payload2,
         equalityCheck: (a, b) => a === b
     });
-    t.deepEquals(newState, [5], 'listens to valueStrategy');
+    t.deepEquals(newState, [5], 'listens to payloadStrategy');
 
-    newState = listRemover(newState, { type: 'TEST', data2: 9 }, {
-        valueStrategy: action => action.data2,
+    newState = listRemover(newState, { type: 'TEST', payload2: 9 }, {
+        payloadStrategy: action => action.payload2,
         equalityCheck: (a, b) => b > a
     });
     t.deepEquals(newState, [], 'listens to equalityCheck');
@@ -145,8 +145,8 @@ test('assign', t => {
     const assigner = assign('ASSIGN'), someObj = {}, anotherObj = {};
 
     t.equals(assigner(someObj), someObj, 'does nothing when not triggered');
-    t.equals(assigner(someObj, { type: 'ASSIGN', data: anotherObj}), anotherObj, 'returns value when triggered');
-    t.equals(assigner(someObj, { type: 'ASSIGN', data: null}), null, 'can unset the state');
+    t.equals(assigner(someObj, { type: 'ASSIGN', payload: anotherObj}), anotherObj, 'returns value when triggered');
+    t.equals(assigner(someObj, { type: 'ASSIGN', payload: null}), null, 'can unset the state');
 
     t.end();
 });
@@ -157,8 +157,8 @@ test('set', t => {
     const setter = set('SET'), someObj = {}, someValue = {};
 
     t.equals(setter(someObj), someObj, 'does nothing when not triggered');
-    t.deepEquals(setter(null, { type: 'SET', data: someValue, key: 'test' }), { test: someValue }, 'sets a value when triggered even on a nonexistent state');
-    t.deepEquals(setter(someObj, { type: 'SET', data: someValue, key: 'test' }), { test: someValue }, 'sets a value when triggered');
+    t.deepEquals(setter(null, { type: 'SET', payload: someValue, key: 'test' }), { test: someValue }, 'sets a value when triggered even on a nonexistent state');
+    t.deepEquals(setter(someObj, { type: 'SET', payload: someValue, key: 'test' }), { test: someValue }, 'sets a value when triggered');
     t.equals(Object.keys(someObj).length, 0, 'does not mutate the state');
 
     t.end();

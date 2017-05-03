@@ -5,7 +5,7 @@ export default function assign(actionOrActions) {
     const actions = castArray(actionOrActions);
     return function (state, action = {}, options = defaultOptions) {
         if (actions.includes(action.type)) {
-            return options.valueStrategy(action);
+            return options.payloadStrategy(action);
         }
         return state;
     }
