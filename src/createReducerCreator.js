@@ -7,6 +7,6 @@ export default function createReducerCreator(options) {
     return function (...reducers) {
         return function (state = opts.initialState, action) {
             return opts.combiner(reducers, opts)(state, action);
-        }
+        };
     };
 }
