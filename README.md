@@ -96,6 +96,9 @@ becomes the state.
 Removes the provided data from the list if present, using the `equailityCheck` option
 to determine what to remove.
 
+##### `updateInList`
+Shorthand for `removeFromList` followed by `addToList`.
+
 #### Object/Collection Operators
 
 ##### `set`

@@ -3,6 +3,7 @@ import createReducerCreator from '../src/createReducerCreator';
 import chainCombiner from '../src/chainCombiner';
 import addToList from '../src/addToList';
 import removeFromList from '../src/removeFromList';
+import updateInList from '../src/updateInList';
 import set from '../src/set';
 import assign from '../src/assign';
 
@@ -135,6 +136,23 @@ test('removeFromList', t => {
     t.deepEquals(newState, [], 'listens to equalityCheck');
 
     t.equals(state.length, 6, 'does not mutate state');
+
+    t.end();
+});
+
+test('updateInList', t => {
+    t.plan(3);
+
+    const updater = updateInList('UPDATE'), state = [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }, { id: 3, value: 'test3' }];
+    const nextState = updater(state, { type: 'UPDATE', payload: { id: 2, value: '2test2' } }, { equalityCheck: (a,b) => a.id === b.id, payloadStrategy: action => action.payload });
+
+    state.forEach(item => {
+        if (item.id === 2) {
+            t.equals(nextState.find(i => i.id === 2).value, '2test2', 'correct value was updated');
+        } else {
+            t.equals(nextState.find(i => i.id === item.id), item, 'unaffected values untouched');
+        }
+    });
 
     t.end();
 });

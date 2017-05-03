@@ -5,3 +5,4 @@ export createReducerCreator from './createReducerCreator';
 export defaultOptions from './defaultOptions';
 export removeFromList from './removeFromList';
 export set from './set';
+export updateInList from './updateInList';
