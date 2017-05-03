@@ -1,6 +1,6 @@
 {
   "name": "rezz",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Composable, chainable reducer toolkit for redux",
   "main": "./src/index.js",
   "repository": "https://github.com/EugeneZ/rezz",
@@ -12,7 +12,6 @@
     "build": "babel src --out-dir dist"
   },
   "dependencies": {
-    "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "warning": "^3.0.0"
   },

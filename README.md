@@ -83,6 +83,9 @@ Combines the provided reducers by running them one after another in the provided
 order.
 
 ### Operators
+Operators create simple reducers. The first argument to an operator is either an array
+of strings, or a string. If it's not either, the `toString` method will be called on it,
+so you can pass actions created by `redux-actions` for example.
 
 #### Array Operators
 
